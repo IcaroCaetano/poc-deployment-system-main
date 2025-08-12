@@ -1,11 +1,20 @@
 apiVersion: v1
 kind: Service
+##name: Nome do Service.
+#Aqui, o nome é definido dinamicamente pelo valor {{ .Release.Name }} do Helm,
+#que corresponde ao nome da release durante a instalação.
 metadata:
   name: {{ .Release.Name }}
 spec:
   type: ClusterIP
+  ##Especifica que o recurso criado será do tipo Service, responsável por expor e
+  #rotear o tráfego para os Pods definidos por um seletor.
   selector:
     app: {{ .Release.Name }}
+  ##port: Porta exposta pelo Service para comunicação interna no cluster.
+  #É configurada usando o valor dinâmico {{ .Values.service.port }} do arquivo values.yaml.
+  #targetPort: Porta no container que o tráfego será redirecionado.
+  #Também configurada dinamicamente via Helm
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
