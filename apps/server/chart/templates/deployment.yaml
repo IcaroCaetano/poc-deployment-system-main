@@ -1,28 +1,51 @@
+##Define a versão da API Kubernetes usada para criar o recurso.
+#apps/v1 é a versão estável para objetos Deployment.
 apiVersion: apps/v1
+##Especifica o tipo de recurso: neste caso, um Deployment, que gerencia réplicas de
+#  pods e garante que a aplicação esteja rodando conforme configurado
 kind: Deployment
+##name: O nome do Deployment será dinâmico, usando o nome da release do Helm.
+#Garantia de unicidade no cluster conforme a instalação.
 metadata:
   name: {{ .Release.Name }}
+##Número de réplicas de pods que devem estar rodando.
+#Controlado pelo valor replicaCount no values.yaml.
 spec:
   replicas: {{ .Values.replicaCount }}
+  ##Define os rótulos usados para selecionar os pods que pertencem a este Deployment.
+  #matchLabels garante que apenas os pods com app=<releaseName> sejam gerenciados.
   selector:
     matchLabels:
       app: {{ .Release.Name }}
   template:
     metadata:
+      ##Rótulo que identifica os pods criados.
+      #Deve corresponder ao selector.matchLabels acima.
       labels:
         app: {{ .Release.Name }}
     spec:
       containers:
+        ##name: Nome do container.
         - name: server
+          #image: Imagem Docker usada, parametrizada via image.repository e image.tag.
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ##Porta interna do container, definida via service.port no values.yaml.
           ports:
             - containerPort: {{ .Values.service.port }}
+
+          ##Verifica se o container continua funcionando.
+          #Faz uma requisição HTTP na rota definida (path e port)
+          #initialDelaySeconds: tempo de espera antes da primeira verificação.
+          #periodSeconds: intervalo entre verificações.
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               port: {{ .Values.livenessProbe.port }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+
+          ##Verifica se o container está pronto para receber tráfego.
+          #Semelhante ao livenessProbe, mas usado para controlar o balanceamento de carga.
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
