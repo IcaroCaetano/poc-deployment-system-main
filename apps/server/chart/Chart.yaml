@@ -1,6 +1,16 @@
+##Versão da API do Helm usada para interpretar o Chart.
+#O v2 é usado a partir do Helm 3.
+#Ele define recursos como dependências embutidas e o formato do Chart.yaml.
 apiVersion: v2
+##Nome do Chart.
+#É usado como identificador quando o Chart é empacotado ou instalado (helm install).
+#Esse valor também pode aparecer como prefixo nos nomes de recursos no Kubernetes.
 name: chart
 description: A Helm chart for Kubernetes
+##Tipo do Chart:
+#application: usado para deploy de aplicações reais.
+#library: usado como base de templates reutilizáveis por outros charts.
+#Aqui está definido como application, o que significa que este Chart vai realmente criar recursos no cluster.
 type: application
 version: 0.1.0
 appVersion: "1.16.0"

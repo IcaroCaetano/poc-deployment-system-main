@@ -7,7 +7,7 @@ variable "prefix" {
 variable "ghcr_username" {
   type        = string
   description = "GitHub Container Registry username"
-  default     = "brscherer"
+  default     = "icaetano"
 }
 
 variable "ghcr_token" {

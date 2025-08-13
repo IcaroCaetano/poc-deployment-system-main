@@ -1,16 +1,28 @@
+##Define qual imagem Docker será usada pelo contêiner.
+#repository: icaetano/server → caminho para a imagem
+#(pode estar no Docker Hub ou em um repositório privado).
+#tag: "latest" → versão da imagem a ser usada.
+#No templates/deployment.yaml, isso é usado para montar o campo:
 image:
-  repository: brscherer/server
+  repository: icaetano/server
   tag: "latest"
+##Número de réplicas (Pods) que o Kubernetes vai manter rodando.
+#Usado no campo spec.replicas do Deployment.
+#Aqui está definido como 1 → apenas um pod será criado.
 replicaCount: 1
 service:
   port: 3000
+##Define uma prova de vida para o contêiner.
+#O Kubernetes vai verificar se o contêiner ainda está saudável.
 livenessProbe:
-  path: /health-check
-  port: 3000
-  initialDelaySeconds: 15
-  periodSeconds: 10
+  path: /health-check #endpoint usado para verificar saúde.
+  port: 3000 #porta onde será feita a checagem.
+  initialDelaySeconds: 15 #espera 15 segundos antes da primeira checagem (permite o app iniciar).
+  periodSeconds: 10 #checa a cada 10 segundos.
+##Define uma prova de prontidão para o contêiner.
+#Indica ao Kubernetes se o Pod está pronto para receber tráfego.
 readinessProbe:
   path: /health-check
   port: 3000
-  initialDelaySeconds: 5
-  periodSeconds: 5
+  initialDelaySeconds: 5 #começa a checar 5 segundos após o start.
+  periodSeconds: 5 #checa a cada 5 segundos.
