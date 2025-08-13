@@ -1,15 +1,22 @@
+##Cria um cluster Kubernetes local usando Kind (Kubernetes in Docker).
+#O nome do cluster é definido usando uma variável var.prefix seguida de poc-kind-cluster.
 resource "kind_cluster" "default" {
   name = "${var.prefix}poc-kind-cluster"
 }
 
+##Namespace infra → onde ficarão serviços de infraestrutura (monitoramento, CI/CD).
 resource "kubernetes_namespace" "infra" {
   metadata { name = "infra" }
 }
 
+##Namespace apps → onde rodarão as aplicações da sua solução.
 resource "kubernetes_namespace" "apps" {
   metadata { name = "apps" }
 }
 
+##Instala Prometheus (monitoramento) no namespace infra.
+#Usa o repositório oficial da comunidade.
+#Versão do chart: 27.14.0.
 resource "helm_release" "prometheus" {
   name       = "prometheus"
   namespace  = kubernetes_namespace.infra.metadata[0].name
@@ -18,6 +25,8 @@ resource "helm_release" "prometheus" {
   version    = "27.14.0"
 }
 
+##Instala Grafana no namespace infra.
+#Usa configurações extras do arquivo grafana-values.yaml
 resource "helm_release" "grafana" {
   name       = "grafana"
   namespace  = kubernetes_namespace.infra.metadata[0].name
@@ -29,6 +38,10 @@ resource "helm_release" "grafana" {
   ]
 }
 
+##Instala Jenkins no namespace infra.
+#Usa configurações definidas no arquivo jenkins-values.yaml.
+#depends_on → garante que o Jenkins só será instalado depois que o cluster Kind
+# estiver criado.
 resource "helm_release" "jenkins" {
   name       = "jenkins"
   namespace  = kubernetes_namespace.infra.metadata[0].name
