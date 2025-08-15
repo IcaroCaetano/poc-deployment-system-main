@@ -1,10 +1,13 @@
+##Define a senha do usuário administrador (admin) do Grafana.
+#Atenção: Em ambientes de produção, não utilizar senhas fracas. Sempre substituir por uma senha segura.
 adminPassword: admin
-
+##apiVersion → Versão da configuração de fontes de dados do Grafana (1 é a versão atual para YAML).
+##datasources → Lista de fontes de dados a serem adicionadas.
 datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-      - name: Prometheus
+      - name: Prometheus #Nome que aparecerá no Grafana.
         type: prometheus
         access: proxy
         url: http://prometheus-server.infra.svc.cluster.local
