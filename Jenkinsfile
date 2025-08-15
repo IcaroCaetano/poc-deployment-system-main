@@ -1,11 +1,20 @@
 pipeline {
   agent any
+  /*
+IMAGE → Local onde a imagem será publicada no GHCR.
+TAG → Identifica a versão da imagem (número incremental do Jenkins).
+HELM_RELEASE → Nome do release Helm que será criado/atualizado.
+KUBE_NAMESPACE → Namespace onde o deploy será feito no Kubernetes.
+*/
   environment {
     IMAGE = "ghcr.io/brscherer/server"
     TAG = "${env.BUILD_NUMBER}"
     HELM_RELEASE = "server"
     KUBE_NAMESPACE = "apps"
   }
+  /*
+Garante que o Node.js configurado no Jenkins esteja disponível para execução dos testes e builds.
+  */
   tools {
     nodejs 'nodejs'
   }
