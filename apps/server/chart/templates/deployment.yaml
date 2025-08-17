@@ -1,27 +1,32 @@
 # Define a versão da API Kubernetes usada para criar o recurso.
 # apps/v1 é a versão estável para objetos Deployment.
+
 # Sets the Kubernetes API version used to create the resource.
 # apps/v1 is the stable version for Deployment objects.
 apiVersion: apps/v1
 # Especifica o tipo de recurso: neste caso, um Deployment, que gerencia réplicas de
 # pods e garante que a aplicação esteja rodando conforme configurado
+
 # Specifies the resource type: in this case, a Deployment, which manages replicas of
 # pods and ensures the application is running as configured
 kind: Deployment
 # name: O nome do Deployment será dinâmico, usando o nome da release do Helm.
 # Garantia de unicidade no cluster conforme a instalação.
+
 # name: The deployment name will be dynamic, using the Helm release name.
 # Guarantees uniqueness within the cluster based on installation.
 metadata:
   name: {{ .Release.Name }}
 # Número de réplicas de pods que devem estar rodando.
 # Controlado pelo valor replicaCount no values.yaml.
+
 # Number of pod replicas that should be running.
 # Controlled by the replicaCount value in values.yaml.
 spec:
   replicas: {{ .Values.replicaCount }}
   # Define os rótulos usados para selecionar os pods que pertencem a este Deployment.
   # matchLabels garante que apenas os pods com app=<releaseName> sejam gerenciados.
+  
   # Defines the labels used to select the pods that belong to this Deployment.
   # matchLabels ensures that only pods with app=<releaseName> are managed.
   selector:
@@ -32,6 +37,7 @@ spec:
     metadata:
       # Rótulo que identifica os pods criados.
       # Deve corresponder ao selector.matchLabels acima.
+      
       # Label that identifies the created pods.
       # Must match selector.matchLabels above.
       labels:
@@ -56,6 +62,7 @@ spec:
 
           # Verifica se o container continua funcionando.
           # Faz uma requisição HTTP na rota definida (path e port)
+          
           # Checks if the container is still running.
           # Makes an HTTP request on the defined route (path and port)
           livenessProbe:
@@ -71,6 +78,7 @@ spec:
 
           # Verifica se o container está pronto para receber tráfego.
           # Semelhante ao livenessProbe, mas usado para controlar o balanceamento de carga.
+          
           # Checks if the container is ready to receive traffic.
           # Similar to livenessProbe, but used to control load balancing.
           readinessProbe:
