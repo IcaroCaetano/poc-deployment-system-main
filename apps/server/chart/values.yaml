@@ -1,28 +1,61 @@
-##Define qual imagem Docker será usada pelo contêiner.
-#repository: icaetano/server → caminho para a imagem
-#(pode estar no Docker Hub ou em um repositório privado).
-#tag: "latest" → versão da imagem a ser usada.
-#No templates/deployment.yaml, isso é usado para montar o campo:
+# Define qual imagem Docker será usada pelo contêiner.
+# repository:  ghcr.io/icaetanodefigueiredo/server → caminho para a imagem
+
+# Defines which Docker image will be used by the container.
+# repository:  ghcr.io/icaetanodefigueiredo/server → path to the image
 image:
-  repository: icaetano/server
+  repository: ghcr.io/icaetanodefigueiredo/server
+  # tag: "latest" → versão da imagem a ser usada.
+  # tag: "latest" → version of the image to use.
+  
   tag: "latest"
-##Número de réplicas (Pods) que o Kubernetes vai manter rodando.
-#Usado no campo spec.replicas do Deployment.
-#Aqui está definido como 1 → apenas um pod será criado.
+# Número de réplicas (Pods) que o Kubernetes vai manter rodando.
+# Usado no campo spec.replicas do Deployment.
+# Aqui está definido como 1 → apenas um pod será criado.
+
+# Number of replicas (Pods) that Kubernetes will keep running.
+# Used in the Deployment's spec.replicas field.
+# Here it is set to 1 → only one pod will be created.
 replicaCount: 1
 service:
-  port: 3000
-##Define uma prova de vida para o contêiner.
-#O Kubernetes vai verificar se o contêiner ainda está saudável.
+ type: ClusterIP
+ #  Porta principal exposta pelo Service e container.
+ # Main port exposed by Service and container.
+  port: 3001
+  # Porta exposta para coleta de métricas.
+  # Exposed port for metrics collection.
+  metricsPort: 9100
+# Define uma prova de vida para o contêiner.
+# O Kubernetes vai verificar se o contêiner ainda está saudável.
+# Defines a proof of health for the container.
+# Kubernetes will check if the container is still healthy.
 livenessProbe:
-  path: /health-check #endpoint usado para verificar saúde.
-  port: 3000 #porta onde será feita a checagem.
-  initialDelaySeconds: 15 #espera 15 segundos antes da primeira checagem (permite o app iniciar).
-  periodSeconds: 10 #checa a cada 10 segundos.
-##Define uma prova de prontidão para o contêiner.
-#Indica ao Kubernetes se o Pod está pronto para receber tráfego.
-readinessProbe:
+ # endpoint usado para verificar saúde.
+ # endpoint used to check health
   path: /health-check
+  # porta onde será feita a checagem.
+  # port where the check will be done.
+  port: 3001
+  # espera 15 segundos antes da primeira checagem (permite o app iniciar).
+  # wait 15 seconds before first check (allows the app to start).
+  initialDelaySeconds: 15 
+  # checa a cada 10 segundos.
+  # check every 10 seconds.
+  periodSeconds: 10
+# Define uma prova de prontidão para o contêiner.
+# Indica ao Kubernetes se o Pod está pronto para receber tráfego.
+# Defines a proof of readiness for the container.
+# Indicates to Kubernetes whether the Pod is ready to receive traffic.
+readinessProbe:
+# Endpoint usado para checar se o container está pronto para receber tráfego.
+# Endpoint used to check if the container is ready to receive traffic.
+  path: /health-check
+  # Porta usada para a readiness probe.
+  # Port used for the readiness probe.
   port: 3000
-  initialDelaySeconds: 5 #começa a checar 5 segundos após o start.
-  periodSeconds: 5 #checa a cada 5 segundos.
+  # comece a verificar 5 segundos após o início.
+  # start checking 5 seconds after start.
+  initialDelaySeconds: 5
+  # checa a cada 5 segundos.
+  # check every 5 seconds.
+  periodSeconds: 5 
