@@ -4,6 +4,7 @@ const app = require("./app");
 
 // Define a porta do servidor
 // Usa a variável de ambiente PORT, se existir, caso contrário, usa 3001
+
 // Set the server port
 // Uses the PORT environment variable, if it exists, otherwise uses 3001
 const port = process.env.PORT || 3001;
