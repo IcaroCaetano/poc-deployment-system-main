@@ -10,9 +10,12 @@ controller:
     - credentials-binding
     - nodejs
     - github
+    - job-dsl
   admin:
     username: admin
-    password: admin
+    existingSecret: jenkins-admin-secret
+    userKey: username
+    passwordKey: password
   serviceType: NodePort
   ingress:
     enabled: false
@@ -28,6 +31,8 @@ controller:
       keyName: username
     - name: jenkins-ghcr-secret
       keyName: token
+    - name: jenkins-admin-secret
+      keyName: password
   JCasC:
     enabled: true
     configScripts:
@@ -36,12 +41,49 @@ controller:
           system:
             domainCredentials:
               - credentials:
-                - usernamePassword:
-                    scope: GLOBAL
-                    id: "ghcr-creds"
-                    username: "${jenkins-ghcr-secret-username}"
-                    password: "${jenkins-ghcr-secret-token}"
-                    description: "GitHub Container Registry credentials"
+                  - usernamePassword:
+                      scope: GLOBAL
+                      id: "ghcr-creds"
+                      username: "${jenkins-ghcr-secret-username}"
+                      password: "${jenkins-ghcr-secret-token}"
+                      description: "GitHub Container Registry credentials"
+
+        tool:
+          nodejs:
+            installations:
+              - name: "nodejs"
+                home: ""
+                properties:
+                  - installSource:
+                      installers:
+                        - nodeJSInstaller:
+                            id: "22.11.0"
+                            npmPackagesRefreshHours: 72
+                            npmPackages: "npm@latest yarn@latest"
+      main-config: |
+        jobs:
+          - script: >
+              multibranchPipelineJob('poc-deployment-system') {
+                branchSources {
+                  git {
+                    id('poc-deployment-system-git')
+                    remote('https://github.com/brscherer/poc-deployment-system')
+                    credentialsId('ghcr-creds')
+                  }
+                }
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('Jenkinsfile')
+                  }
+                }
+                orphanedItemStrategy {
+                  discardOldItems {
+                    daysToKeep(30)
+                    numToKeep(10)
+                  }
+                }
+              }
+
 agent:
   podName: jenkins-agent
   namespace: infra
@@ -50,7 +92,7 @@ agent:
   runAsUser: 0
   image:
     registry: ghcr.io
-    repository: alex-carvalho/sandbox/jenkins-agent
+    repository: brscherer/jenkins-agent
     tag: latest
     pullPolicy: Always
   customJenkinsLabels: "infra jenkins"
@@ -62,6 +104,7 @@ agent:
     limits:
       cpu: 1
       memory: 2Gi
+
 persistence:
   enabled: true
   size: 8Gi
