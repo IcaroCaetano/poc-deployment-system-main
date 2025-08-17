@@ -34,10 +34,7 @@ resource "helm_release" "prometheus" {
 }
 
 # Instala Grafana no namespace infra.
-# Usa configurações extras do arquivo grafana-values.yaml
-
 # Install Grafana in the infra namespace.
-# Use extra configuration from the grafana-values.yaml file
 resource "helm_release" "grafana" {
   name       = "grafana"
   namespace  = kubernetes_namespace.infra.metadata[0].name
@@ -46,6 +43,9 @@ resource "helm_release" "grafana" {
   # Versão do chart
   # Chart version
   version    = "9.0.0"
+
+ # Usa configurações extras do arquivo grafana-values.yaml
+ # Use extra configuration from the grafana-values.yaml file
   values = [
     file("${path.module}/grafana-values.yaml")
   ]
