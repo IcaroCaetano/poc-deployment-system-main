@@ -1,24 +1,62 @@
 controller:
+# Especifica a ServiceAccount que o Jenkins usará (já criada anteriormente e vinculada a permissões de cluster).
+# Specifies the ServiceAccount that Jenkins will use (already created previously and tied to cluster permissions).
   serviceAccount: jenkins-sa
+  # Lista de plugins que serão instalados automaticamente no Jenkins:
+  # List of plugins that will be automatically installed in Jenkins:
   installPlugins:
+  # Integração com Kubernetes.
+  # Integration with Kubernetes.
     - kubernetes
+    # Suporte a pipelines.
+    # Pipeline support.
     - workflow-aggregator
+    # Integração com Git.
+    # Git integration.
     - git
+    # Pipelines com Docker.
+    # Pipelines with Docker.
     - docker-workflow
+    # Nova interface do Jenkins
+    # New Jenkins interface
     - blueocean
+    # Configuração do Jenkins via código (JCasC).
+    # Jenkins configuration via code (JCasC).
     - configuration-as-code
+    # Manipulação segura de credenciais.
+    # Secure credential handling.
     - credentials-binding
+    # Suporte a Node.js.
+    # Node.js support.
     - nodejs
+    # Integração com GitHub.
+    # GitHub integration.
     - github
+    # Criação de jobs via DSL.
+    # Job creation via DSL.
     - job-dsl
   admin:
+    # Configuração do usuário administrador:
+    # Administrator user configuration:
     username: admin
+    # Secret já existente que guarda as credenciais de admin.
+    # Existing secret that stores admin credentials.
     existingSecret: jenkins-admin-secret
+    # Chave dentro do Secret para o usuário.
+    # Key inside Secret for user.
     userKey: username
+    # Chave dentro do Secret para a senha
+    # Key inside Secret for password
     passwordKey: password
+  # Jenkins será exposto via NodePort (acessível no IP do Node).
+  # Jenkins will be exposed via NodePort (accessible on Node IP).
   serviceType: NodePort
+  # Ingress está desativado (não expõe via Ingress Controller).
+  # Ingress is disabled (does not expose via Ingress Controller).
   ingress:
     enabled: false
+  # Recursos reservados para o pod do Jenkins:
+  # Resources reserved for the Jenkins pod:
   resources:
     requests:
       cpu: 500m
@@ -26,16 +64,22 @@ controller:
     limits:
       cpu: 1
       memory: 2Gi
+  # Secrets adicionais a serem montados no Jenkins:
+  # Additional secrets to be mounted in Jenkins:
   additionalExistingSecrets:
-    - name: jenkins-ghcr-secret
+    - name: jenkins-ghcr-secret # (usernamen)
       keyName: username
-    - name: jenkins-ghcr-secret
+    - name: jenkins-ghcr-secret #(token)
       keyName: token
-    - name: jenkins-admin-secret
+    - name: jenkins-admin-secret #(password)
       keyName: password
+  # Configuração declarativa do Jenkins:
+  # Jenkins declarative configuration:
   JCasC:
     enabled: true
     configScripts:
+    # Configura credenciais do GitHub Container Registry (GHCR) como usernamePassword com ID ghcr-creds.
+    # Configure GitHub Container Registry (GHCR) credentials as usernamePassword with ID ghcr-creds.
       jenkins-casc-configs: |
         credentials:
           system:
@@ -47,7 +91,8 @@ controller:
                       username: "${jenkins-ghcr-secret-username}"
                       password: "${jenkins-ghcr-secret-token}"
                       description: "GitHub Container Registry credentials"
-
+      # Configura instalação do Node.js (versão 22.11.0) com pacotes npm e yarn.
+      # Configure Node.js installation (version 22.11.0) with npm and yarn packages.
         tool:
           nodejs:
             installations:
@@ -60,13 +105,28 @@ controller:
                             id: "22.11.0"
                             npmPackagesRefreshHours: 72
                             npmPackages: "npm@latest yarn@latest"
+
       main-config: |
         jobs:
+      # Cria um job multibranch chamado poc-deployment-system.
+      # Create a multibranch job named poc-deployment-system.
+
+     # Usa repositório GitHub https://github.com/brscherer/poc-deployment-system.
+     # Use GitHub repository https://github.com/brscherer/poc-deployment-system.
+
+     # Autenticação com ghcr-creds
+     # Autenticação com ghcr-creds
+
+     # Busca o Jenkinsfile na raiz.
+     # Fetch the Jenkinsfile from the root.
+
+     # Define política de descarte de builds antigos (30 dias ou 10 builds).
+     # Defines discard policy for old builds (30 days or 10 builds).
           - script: >
               multibranchPipelineJob('poc-deployment-system') {
                 branchSources {
                   git {
-                    id('poc-deployment-system-git')
+                    id('poc-deployment-system-git') 
                     remote('https://github.com/brscherer/poc-deployment-system')
                     credentialsId('ghcr-creds')
                   }
@@ -83,19 +143,34 @@ controller:
                   }
                 }
               }
-
+# Configuração dos Jenkins Agents (pods que executam os jobs).
+# Configuration of Jenkins Agents (pods that run the jobs).
 agent:
+ # Nome do pod do agente.
+ # Agent pod name.
   podName: jenkins-agent
+  # Namespace onde será executado.
+  # Namespace where it will be executed.
   namespace: infra
+  # Usa a mesma conta de serviço do controller.
+  # Uses the same service account as the controller.
   serviceAccount: jenkins-sa
+  # Habilita o agente Kubernetes.
+  # Enables the Kubernetes agent.
   enabled: true
+  # Roda como root.
+  # Runs as root.
   runAsUser: 0
   image:
     registry: ghcr.io
     repository: brscherer/jenkins-agent
     tag: latest
     pullPolicy: Always
+    # Labels atribuídas ao agente, usadas para seleção em pipelines
+    # Labels assigned to the agent, used for selection in pipelines
   customJenkinsLabels: "infra jenkins"
+  # Dá privilégios elevados (necessário p/ operações como Docker-in-Docker).
+  # Give elevated privileges (required for Docker-in-Docker operations). privileged: true
   privileged: true
   resources:
     requests:
@@ -105,6 +180,12 @@ agent:
       cpu: 1
       memory: 2Gi
 
+# Configuração de armazenamento persistente para o Jenkins.
+# Persistent storage configuration for Jenkins.
 persistence:
+  # Ativa PVC (PersistentVolumeClaim).
+  # Activates PVC (PersistentVolumeClaim).
   enabled: true
+  # Reserva 8 GB para dados (jobs, plugins, configs).
+  # Reserve 8 GB for data (jobs, plugins, configs).
   size: 8Gi
