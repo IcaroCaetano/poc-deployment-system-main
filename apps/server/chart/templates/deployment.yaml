@@ -1,54 +1,85 @@
-##Define a versão da API Kubernetes usada para criar o recurso.
-#apps/v1 é a versão estável para objetos Deployment.
+# Define a versão da API Kubernetes usada para criar o recurso.
+# apps/v1 é a versão estável para objetos Deployment.
+# Sets the Kubernetes API version used to create the resource.
+# apps/v1 is the stable version for Deployment objects.
 apiVersion: apps/v1
-##Especifica o tipo de recurso: neste caso, um Deployment, que gerencia réplicas de
-#  pods e garante que a aplicação esteja rodando conforme configurado
+# Especifica o tipo de recurso: neste caso, um Deployment, que gerencia réplicas de
+# pods e garante que a aplicação esteja rodando conforme configurado
+# Specifies the resource type: in this case, a Deployment, which manages replicas of
+# pods and ensures the application is running as configured
 kind: Deployment
-##name: O nome do Deployment será dinâmico, usando o nome da release do Helm.
-#Garantia de unicidade no cluster conforme a instalação.
+# name: O nome do Deployment será dinâmico, usando o nome da release do Helm.
+# Garantia de unicidade no cluster conforme a instalação.
+# name: The deployment name will be dynamic, using the Helm release name.
+# Guarantees uniqueness within the cluster based on installation.
 metadata:
   name: {{ .Release.Name }}
-##Número de réplicas de pods que devem estar rodando.
-#Controlado pelo valor replicaCount no values.yaml.
+# Número de réplicas de pods que devem estar rodando.
+# Controlado pelo valor replicaCount no values.yaml.
+# Number of pod replicas that should be running.
+# Controlled by the replicaCount value in values.yaml.
 spec:
   replicas: {{ .Values.replicaCount }}
-  ##Define os rótulos usados para selecionar os pods que pertencem a este Deployment.
-  #matchLabels garante que apenas os pods com app=<releaseName> sejam gerenciados.
+  # Define os rótulos usados para selecionar os pods que pertencem a este Deployment.
+  # matchLabels garante que apenas os pods com app=<releaseName> sejam gerenciados.
+  # Defines the labels used to select the pods that belong to this Deployment.
+  # matchLabels ensures that only pods with app=<releaseName> are managed.
   selector:
     matchLabels:
       app: {{ .Release.Name }}
+  
   template:
     metadata:
-      ##Rótulo que identifica os pods criados.
-      #Deve corresponder ao selector.matchLabels acima.
+      # Rótulo que identifica os pods criados.
+      # Deve corresponder ao selector.matchLabels acima.
+      # Label that identifies the created pods.
+      # Must match selector.matchLabels above.
       labels:
         app: {{ .Release.Name }}
     spec:
       containers:
-        ##name: Nome do container.
+        # name: Nome do container.
+        # name: Name of the container.
         - name: server
-          #image: Imagem Docker usada, parametrizada via image.repository e image.tag.
+          # image: Imagem Docker usada, parametrizada via image.repository e image.tag.
+          # image: Docker image used, parameterized via image.repository and image.tag.
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          ##Porta interna do container, definida via service.port no values.yaml.
+          # Porta interna do container, definida via service.port no values.yaml.
+          # Container's internal port, defined via service.port in values.yaml.
           ports:
+            # Porta principal da aplicação.
+            # Porta principal da aplicação.
             - containerPort: {{ .Values.service.port }}
+            #  Porta usada para métricas.
+            # Port used for metrics.
+            - containerPort: {{ .Values.service.metricsPort }}
 
-          ##Verifica se o container continua funcionando.
-          #Faz uma requisição HTTP na rota definida (path e port)
-          #initialDelaySeconds: tempo de espera antes da primeira verificação.
-          #periodSeconds: intervalo entre verificações.
+          # Verifica se o container continua funcionando.
+          # Faz uma requisição HTTP na rota definida (path e port)
+          # Checks if the container is still running.
+          # Makes an HTTP request on the defined route (path and port)
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               port: {{ .Values.livenessProbe.port }}
+            # tempo de espera antes da primeira verificação.
+            # time to wait before first check.
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            # intervalo entre verificações.
+            # interval between checks.
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
 
-          ##Verifica se o container está pronto para receber tráfego.
-          #Semelhante ao livenessProbe, mas usado para controlar o balanceamento de carga.
+          # Verifica se o container está pronto para receber tráfego.
+          # Semelhante ao livenessProbe, mas usado para controlar o balanceamento de carga.
+          # Checks if the container is ready to receive traffic.
+          # Similar to livenessProbe, but used to control load balancing.
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
               port: {{ .Values.readinessProbe.port }}
+            # tempo de espera antes da primeira verificação.
+            # time to wait before first check.
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            # intervalo entre verificações.
+            # interval between checks.
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
