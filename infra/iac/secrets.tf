@@ -23,19 +23,29 @@ resource "kubernetes_secret" "ghcr" {
     token    = var.ghcr_token
   }
 
+# Storage in Opaque format, allowing flexibility for different applications to consume this data.
   type = "Opaque"
 }
 
+# Armazena as credenciais administrativas do Jenkins, necessárias para configuração inicial e autenticação do serviço.
+# Stores Jenkins administrative credentials, required for initial configuration and service authentication.
 resource "kubernetes_secret" "jenkins_admin" {
   metadata {
+    # Nome no Kubernetes
+    # Name in Kubernetes
     name      = "jenkins-admin-secret"
     namespace = kubernetes_namespace.infra.metadata[0].name
   }
 
   data = {
+    # valor fixo "admin"
+    # fixed value "admin"
     username = "admin"
+    # valor definido em var.jenkins_admin_password
+    # value set in var.jenkins_admin_password
     password = var.jenkins_admin_password
   }
-
+  # Armazenamento em formato Opaque, permitindo flexibilidade para diferentes aplicações consumirem esses dados.
+  # Storage in Opaque format, allowing flexibility for different applications to consume this data.
   type = "Opaque"
 }
