@@ -1,20 +1,57 @@
+# Define a versão da API Kubernetes usada. v1 é estável para recursos de Service.
+# Sets the Kubernetes API version used. v1 is stable for Service resources.
 apiVersion: v1
+# Especifica que o recurso criado é um Service.
+# Specifies that the created resource is a Service.
 kind: Service
-##name: Nome do Service.
-#Aqui, o nome é definido dinamicamente pelo valor {{ .Release.Name }} do Helm,
-#que corresponde ao nome da release durante a instalação.
+# name: Nome do Service.
+# Aqui, o nome é definido dinamicamente pelo valor {{ .Release.Name }} do Helm,
+# que corresponde ao nome da release durante a instalação.
+# name: Service name.
+# Here, the name is dynamically set by the Helm value {{ .Release.Name }},
+# which corresponds to the release name during installation.
 metadata:
+#  nome do Service é dinâmico, herdando o nome da release do Helm.
+# Service name is dynamic, inheriting the Helm release name.
   name: {{ .Release.Name }}
+# Metadados para integração com Prometheus:
+# Metadata for Prometheus integration:
+    annotations:
+     # Habilita scraping de métricas.
+     # Enables metrics scraping.
+    prometheus.io/scrape: "true"
+    # Endpoint de métricas.
+    # Metrics endpoint.
+    prometheus.io/path: "/metrics"
+    # Porta de onde as métricas serão coletadas.
+    # Port from which metrics will be collected.
+    prometheus.io/port: "{{ .Values.service.port }}"
 spec:
+# Tipo de Service que cria um IP interno no cluster, acessível apenas dentro do cluster.
+# Type of Service that creates an internal IP in the cluster, accessible only within the cluster.
   type: ClusterIP
-  ##Especifica que o recurso criado será do tipo Service, responsável por expor e
-  #rotear o tráfego para os Pods definidos por um seletor.
+  # spec.selector - Define quais Pods este Service irá direcionar
+  # Especifica que o recurso criado será do tipo Service, responsável por expor e
+  # rotear o tráfego para os Pods definidos por um seletor.
+  
+  # spec.selector - Defines which Pods this Service will target.
+  # Specifies that the created resource will be of the Service type, responsible for exposing and
+  # routing traffic to the Pods defined by a selector.
   selector:
     app: {{ .Release.Name }}
-  ##port: Porta exposta pelo Service para comunicação interna no cluster.
-  #É configurada usando o valor dinâmico {{ .Values.service.port }} do arquivo values.yaml.
-  #targetPort: Porta no container que o tráfego será redirecionado.
-  #Também configurada dinamicamente via Helm
+  # spec.ports: Porta exposta pelo Service para comunicação interna no cluster.
+  # É configurada usando o valor dinâmico {{ .Values.service.port }} do arquivo values.yaml.
+  # targetPort: Porta no container que o tráfego será redirecionado.
+  # Também configurada dinamicamente via Helm
+  
+  # spec.ports: Port exposed by the Service for internal communication within the cluster.
+  # Configured using the dynamic value {{ .Values.service.port }} from the values.yaml file.
+  # targetPort: Port on the container to which traffic will be redirected.
+  # Also configured dynamically via Helm
   ports:
     - port: {{ .Values.service.port }}
+       #targetPort: Porta no container que o tráfego será redirecionado.
+      #Também configurada dinamicamente via Helm
+      #targetPort: Port in the container to which traffic will be redirected.
+      #Also configured dynamically via Helm
       targetPort: {{ .Values.service.port }}
