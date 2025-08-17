@@ -2,7 +2,7 @@
 # Secret que armazena credenciais para acessar o GitHub Container Registry (GHCR) a partir do Jenkins
 
 # This file defines Secrets in Kubernetes using opentofu, which store sensitive information, such as credentials, securely.
-Secret that stores credentials to access GitHub Container Registry (GHCR) from Jenkins
+# Secret that stores credentials to access GitHub Container Registry (GHCR) from Jenkins
 resource "kubernetes_secret" "ghcr" {
   metadata {
     # Nome do Secret no Kubernetes: jenkins-ghcr-secret
