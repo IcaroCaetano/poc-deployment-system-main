@@ -23,12 +23,14 @@ resource "kubernetes_namespace" "infra" {
 }
 
 # Namespace apps → onde rodarão as aplicações da sua solução.
+
 # Namespace apps → where your solution's applications will run.
 resource "kubernetes_namespace" "apps" {
   metadata { name = "apps" }
 }
 
 # Instala Prometheus (monitoramento) no namespace infra.
+
 # Install Prometheus (monitoring) in the infra namespace.
 resource "helm_release" "prometheus" {
   name       = "prometheus"
@@ -43,6 +45,7 @@ resource "helm_release" "prometheus" {
 }
 
 # Instala Grafana no namespace infra.
+
 # Install Grafana in the infra namespace.
 resource "helm_release" "grafana" {
   name       = "grafana"
@@ -54,6 +57,7 @@ resource "helm_release" "grafana" {
   version    = "9.0.0"
 
  # Usa configurações extras do arquivo grafana-values.yaml
+
  # Use extra configuration from the grafana-values.yaml file
   values = [
     file("${path.module}/grafana-values.yaml")
@@ -61,6 +65,7 @@ resource "helm_release" "grafana" {
 }
 
 # Instala Jenkins no namespace infra.
+
 # Installs Jenkins in the infra namespace.
 resource "helm_release" "jenkins" {
   name       = "jenkins"
@@ -72,11 +77,13 @@ resource "helm_release" "jenkins" {
   version    = "5.8.73"
   create_namespace = false
 # Usa configurações definidas no arquivo jenkins-values.yaml. 
+
 # Uses settings defined in the jenkins-values.yaml file.
   values = [
     file("${path.module}/jenkins-values.yaml")
   ]
   # depends_on → garante que o Jenkins só será instalado depois que o cluster Kind estiver criado.
+
   # depends_on → ensures that Jenkins will only be installed after the Kind cluster is created.
   depends_on = [kind_cluster.default]
 }
