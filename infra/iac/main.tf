@@ -60,6 +60,8 @@ resource "helm_release" "grafana" {
   # Chart version
   version    = "9.0.0"
   create_namespace = false
+ # Usa configurações extras do arquivo grafana-values.yaml
+ # Use extra configuration from the grafana-values.yaml file
   values = [
     file("${path.module}/values/grafana-values.yaml")
   ]
@@ -69,13 +71,6 @@ resource "helm_release" "grafana" {
   }
   wait    = true
   timeout = 900
-
- # Usa configurações extras do arquivo grafana-values.yaml
-
- # Use extra configuration from the grafana-values.yaml file
-  values = [
-    file("${path.module}/grafana-values.yaml")
-  ]
 }
 
 # Instala Jenkins no namespace infra.
