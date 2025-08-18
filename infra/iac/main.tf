@@ -17,14 +17,15 @@ resource "kind_cluster" "default" {
 }
 
 # Namespace infra → onde ficarão serviços de infraestrutura (monitoramento, CI/CD).
+
 # Infra namespace → where infrastructure services (monitoring, CI/CD) will be located.
 resource "kubernetes_namespace" "infra" {
   metadata { name = "infra" }
 }
 
-# Namespace apps → onde rodarão as aplicações da sua solução.
+# Namespace apps → onde rodarão as aplicações da nossa solução.
 
-# Namespace apps → where your solution's applications will run.
+# Namespace apps → where our solution's applications will run.
 resource "kubernetes_namespace" "apps" {
   metadata { name = "apps" }
 }
