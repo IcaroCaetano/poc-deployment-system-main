@@ -99,3 +99,42 @@ resource "helm_release" "jenkins" {
   wait    = true
   timeout = 900
 }
+
+/*
+O que é e por que usar?
+
+OpenTofu é um projeto 100% open source, mantido pela Linux Foundation, com a promessa de sempre permanecer aberto.
+
+Ele é compatível com Terraform 1.5 (no início) e segue trabalhando para ter compatibilidade futura e novas funcionalidades.
+
+A ideia é que você possa migrar sem grandes alterações no código existente.
+
+🚀 Vantagens de usar o OpenTofu
+
+Open Source garantido
+
+Licenciado sob MPL 2.0, não vai ter mudança para licenças restritivas como a da HashiCorp.
+
+Compatibilidade com Terraform
+
+Pode rodar o mesmo código que você já usa em Terraform (até 1.5, e em muitos casos além).
+
+Os mesmos provedores e módulos funcionam, porque OpenTofu mantém compatibilidade.
+
+Independência e comunidade forte
+
+Não está preso às decisões de uma empresa privada.
+
+É liderado pela Linux Foundation, com governança aberta.
+
+Evolução mais rápida
+
+Como não depende de interesses comerciais, a comunidade pode priorizar features pedidas pelos usuários.
+
+Exemplos já em roadmap: melhorias de segurança, colaboração e escalabilidade.
+
+Seguro para longo prazo
+
+Evita risco de lock-in em uma ferramenta que pode mudar de licença ou limitar usos.
+*/
+
