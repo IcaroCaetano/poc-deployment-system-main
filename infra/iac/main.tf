@@ -101,40 +101,39 @@ resource "helm_release" "jenkins" {
 }
 
 /*
+Sobre o Open Tofu
 O que é e por que usar?
-
 OpenTofu é um projeto 100% open source, mantido pela Linux Foundation, com a promessa de sempre permanecer aberto.
-
 Ele é compatível com Terraform 1.5 (no início) e segue trabalhando para ter compatibilidade futura e novas funcionalidades.
-
 A ideia é que você possa migrar sem grandes alterações no código existente.
 
 🚀 Vantagens de usar o OpenTofu
+- Open Source garantido
+- Compatibilidade com Terraform
+- Independência e comunidade forte
+  Não está preso às decisões de uma empresa privada.
+-Evolução mais rápida
+  Como não depende de interesses comerciais, a comunidade pode priorizar features pedidas pelos usuários.
+-Seguro para longo prazo
 
-Open Source garantido
+Desvantagens:
+Adoção no mercado: Terraform ainda é mais conhecido
 
-Licenciado sob MPL 2.0, não vai ter mudança para licenças restritivas como a da HashiCorp.
+What is it and why use it?
+OpenTofu is a 100% open source project, maintained by the Linux Foundation, with a promise to always remain open.
+It is compatible with Terraform 1.5 (initially) and continues to work towards future compatibility and new features.
+The idea is that you can migrate without major changes to the existing code.
 
-Compatibilidade com Terraform
+🚀 Advantages of using OpenTofu
+- Guaranteed Open Source
+- Compatibility with Terraform
+- Independence and a strong community
+Not tied to the decisions of a private company.
+- Faster evolution
+Because it is not dependent on commercial interests, the community can prioritize features requested by users.
+- Long-term security
 
-Pode rodar o mesmo código que você já usa em Terraform (até 1.5, e em muitos casos além).
-
-Os mesmos provedores e módulos funcionam, porque OpenTofu mantém compatibilidade.
-
-Independência e comunidade forte
-
-Não está preso às decisões de uma empresa privada.
-
-É liderado pela Linux Foundation, com governança aberta.
-
-Evolução mais rápida
-
-Como não depende de interesses comerciais, a comunidade pode priorizar features pedidas pelos usuários.
-
-Exemplos já em roadmap: melhorias de segurança, colaboração e escalabilidade.
-
-Seguro para longo prazo
-
-Evita risco de lock-in em uma ferramenta que pode mudar de licença ou limitar usos.
+Disadvantages:
+Market adoption: Terraform is still better known
 */
 
