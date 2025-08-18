@@ -92,7 +92,6 @@ resource "helm_release" "jenkins" {
 
 /*
 Por que usar create_namespace = false
-Controle centralizado: Em muitos times, os namespaces são criados manualmente ou via outro módulo Terraform, para manter controle de naming, labels e policies.
 Evitar conflitos: Se o namespace já existir e estiver configurado com quotas, RBAC, network policies etc., você não quer que o Helm sobrescreva nada.
 Organização: Mantém a separação clara entre infraestrutura básica (namespaces, quotas, políticas) e aplicações (que só usam os namespaces existentes).
 */
