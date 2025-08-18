@@ -140,6 +140,7 @@ Market adoption: Terraform is still better known
 */
 
 /*
+---------------------------------------------------------------------------------------------------------------
 📌 O que é o Helm?
 Helm é um gerenciador de pacotes para Kubernetes, parecido com o apt (Linux) ou o npm (Node.js).
 Ele usa charts (pacotes Helm) para instalar, atualizar e gerenciar aplicações dentro de um cluster Kubernetes.
