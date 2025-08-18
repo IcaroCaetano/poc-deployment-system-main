@@ -43,6 +43,9 @@ resource "helm_release" "prometheus" {
   # Versão do chart
   # Chart version
   version    = "27.14.0"
+  create_namespace = false
+  wait    = true
+  timeout = 900
 }
 
 # Instala Grafana no namespace infra.
