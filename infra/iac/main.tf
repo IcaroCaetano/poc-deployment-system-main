@@ -87,8 +87,23 @@ resource "helm_release" "jenkins" {
   # Versão do chart
   # Chart version
   version    = "5.8.73"
-  # significa que o namespace onde os recursos serão criados não será automaticamente criado.
-  # means that the namespace where the resources will be created will not be automatically created.
+  # significa que o namespace onde os recursos serão criados não será automaticamente criado, e assume que ele já existe.
+
+
+/*
+Por que usar create_namespace = false
+Controle centralizado: Em muitos times, os namespaces são criados manualmente ou via outro módulo Terraform, para manter controle de naming, labels e policies.
+Evitar conflitos: Se o namespace já existir e estiver configurado com quotas, RBAC, network policies etc., você não quer que o Helm sobrescreva nada.
+Organização: Mantém a separação clara entre infraestrutura básica (namespaces, quotas, políticas) e aplicações (que só usam os namespaces existentes).
+*/
+  # means that the namespace where the resources will be created will not be automatically created, and assumes that it already exists.
+
+/*
+Why use create_namespace = false
+Centralized control: On many teams, namespaces are created manually or via another Terraform module to maintain control over naming, labels, and policies.
+Avoid conflicts: If the namespace already exists and is configured with quotas, RBAC, network policies, etc., you don't want Helm to overwrite anything.
+Organization: Maintains a clear separation between core infrastructure (namespaces, quotas, policies) and applications (which only use existing namespaces).*/
+
   create_namespace = false
 # Usa configurações definidas no arquivo jenkins-values.yaml. 
 # Uses settings defined in the jenkins-values.yaml file.
