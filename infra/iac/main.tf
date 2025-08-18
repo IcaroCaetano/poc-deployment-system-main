@@ -103,7 +103,7 @@ resource "helm_release" "jenkins" {
 /*
 Sobre o Open Tofu
 O que é e por que usar?
-OpenTofu é um projeto 100% open source, mantido pela Linux Foundation, com a promessa de sempre permanecer aberto.
+OpenTofu é um projeto 100% open source, com a promessa de sempre permanecer aberto.
 Ele é compatível com Terraform 1.5 (no início) e segue trabalhando para ter compatibilidade futura e novas funcionalidades.
 A ideia é que você possa migrar sem grandes alterações no código existente.
 
@@ -120,7 +120,7 @@ Desvantagens:
 Adoção no mercado: Terraform ainda é mais conhecido
 
 What is it and why use it?
-OpenTofu is a 100% open source project, maintained by the Linux Foundation, with a promise to always remain open.
+OpenTofu is a 100% open source project,  with a promise to always remain open.
 It is compatible with Terraform 1.5 (initially) and continues to work towards future compatibility and new features.
 The idea is that you can migrate without major changes to the existing code.
 
