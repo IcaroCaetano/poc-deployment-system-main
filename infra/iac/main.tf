@@ -59,6 +59,16 @@ resource "helm_release" "grafana" {
   # Versão do chart
   # Chart version
   version    = "9.0.0"
+  create_namespace = false
+  values = [
+    file("${path.module}/values/grafana-values.yaml")
+  ]
+  set {
+    name  = "service.type"
+    value = "ClusterIP"
+  }
+  wait    = true
+  timeout = 900
 
  # Usa configurações extras do arquivo grafana-values.yaml
 
