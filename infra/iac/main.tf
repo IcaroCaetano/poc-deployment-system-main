@@ -86,13 +86,13 @@ resource "helm_release" "jenkins" {
   version    = "5.8.73"
   create_namespace = false
 # Usa configurações definidas no arquivo jenkins-values.yaml. 
-
 # Uses settings defined in the jenkins-values.yaml file.
   values = [
     file("${path.module}/jenkins-values.yaml")
   ]
   # depends_on → garante que o Jenkins só será instalado depois que o cluster Kind estiver criado.
-
   # depends_on → ensures that Jenkins will only be installed after the Kind cluster is created.
   depends_on = [kind_cluster.default]
+  wait    = true
+  timeout = 900
 }
