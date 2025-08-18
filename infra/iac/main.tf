@@ -43,6 +43,8 @@ resource "helm_release" "prometheus" {
   # Chart version
   version    = "27.14.0"
   create_namespace = false
+  #Configura wait e timeout para garantir que a instalação finalize corretamente antes de continuar.
+  #Configure wait and timeout to ensure the installation completes correctly before continuing.
   wait    = true
   timeout = 900
 }
