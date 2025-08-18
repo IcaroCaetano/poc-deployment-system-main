@@ -203,3 +203,12 @@ Dependency on external charts: Relying on community charts can pose security ris
 Difficult to debug: When something goes wrong, the error isn't always clear.
 */
 
+/*
+1. kind
+
+O kind é uma ferramenta que significa Kubernetes IN Docker.
+
+Ele cria clusters Kubernetes rodando dentro de containers Docker na sua máquina local.
+
+Muito usado para testes locais, CI/CD e desenvolvimento, porque é leve, rápido de criar/apagar e não depende de nuvem.
+*/
