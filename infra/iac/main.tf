@@ -68,6 +68,8 @@ resource "helm_release" "grafana" {
   ]
   set {
     name  = "service.type"
+  # Define o tipo de serviço como ClusterIP (acessível apenas dentro do cluster).
+  # Sets the service type to ClusterIP (accessible only within the cluster).
     value = "ClusterIP"
   }
   wait    = true
