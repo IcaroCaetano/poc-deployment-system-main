@@ -1,10 +1,10 @@
 # Esse arquivo é um manifesto de infraestrutura.
 # Ele basicamente e responasvel por automatizar a criação de um ambiente Kubernetes local usando Kind (Kubernetes in Docker) e instala serviços essenciais 
-# de infraestrutura via Helm charts.
+# de infraestrutura via Helm charts para monitoramento e CI/CD.
 
 # # This file is an infrastructure manifest.
-# It is basically responsible for automating the creation of a local Kubernetes environment using Kind (Kubernetes in Docker) and installs essential 
-# infrastructure services via Helm charts.
+# It is basically responsible for automating the creation of a local Kubernetes environment using Kind (Kubernetes in Docker) and installing essential infrastructure services
+# via Helm charts for monitoring and CI/CD.
 
 # Cria um cluster Kubernetes local usando Kind (Kubernetes in Docker).
 # O nome do cluster é definido usando uma variável var.prefix seguida de poc-kind-cluster.
