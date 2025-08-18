@@ -87,6 +87,8 @@ resource "helm_release" "jenkins" {
   # Versão do chart
   # Chart version
   version    = "5.8.73"
+  # significa que o namespace onde os recursos serão criados não será automaticamente criado.
+  # means that the namespace where the resources will be created will not be automatically created.
   create_namespace = false
 # Usa configurações definidas no arquivo jenkins-values.yaml. 
 # Uses settings defined in the jenkins-values.yaml file.
