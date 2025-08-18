@@ -137,3 +137,51 @@ Disadvantages:
 Market adoption: Terraform is still better known
 */
 
+/*
+📌 O que é o Helm?
+Helm é um gerenciador de pacotes para Kubernetes, parecido com o apt (Linux) ou o npm (Node.js).
+Ele usa charts (pacotes Helm) para instalar, atualizar e gerenciar aplicações dentro de um cluster Kubernetes.
+
+🚀 Por que usar o Helm?
+Simplifica o deploy de aplicações complexas (banco de dados, Jenkins, Prometheus, etc.).
+Reduz repetição de YAMLs, centralizando tudo em templates.
+Facilita upgrades e rollbacks de versões.
+Permite reuso de configurações por meio de values.yaml.
+
+✅ Vantagens
+Automação: menos comandos manuais com kubectl.
+Padronização: charts reutilizáveis evitam copiar e colar YAML.
+Versionamento: fácil rollback para versões anteriores.
+Comunidade forte: existem milhares de charts prontos (ex: nginx, postgres, jenkins).
+Integração com CI/CD: ótimo para pipelines automáticos.
+
+⚠️ Desvantagens
+Curva de aprendizado: templates Helm usam Go templates, que podem ser confusos.
+Complexidade em customizações: às vezes é mais difícil do que editar YAML puro.
+Dependência de charts externos: confiar em charts da comunidade pode trazer riscos de segurança.
+Debug difícil: quando algo dá errado, o erro nem sempre é claro.
+
+📌 What is Helm?
+Helm is a package manager for Kubernetes, similar to apt (Linux) or npm (Node.js).
+It uses charts (Helm packages) to install, update, and manage applications within a Kubernetes cluster.
+
+🚀 Why use Helm?
+It simplifies the deployment of complex applications (databases, Jenkins, Prometheus, etc.).
+It reduces YAML repetition by centralizing everything in templates.
+It facilitates version upgrades and rollbacks.
+It allows configuration reuse through values.yaml.
+
+✅ Advantages
+Automation: fewer manual commands with kubectl.
+Standardization: reusable charts avoid copying and pasting YAML.
+Versioning: easy rollback to previous versions.
+Strong community: There are thousands of ready-made charts (e.g., Nginx, Postgres, Jenkins).
+Integration with CI/CD: Great for automated pipelines.
+
+⚠️ Disadvantages
+Learning curve: Helm templates use Go templates, which can be confusing.
+Complex customizations: Sometimes more difficult than editing pure YAML.
+Dependency on external charts: Relying on community charts can pose security risks.
+Difficult to debug: When something goes wrong, the error isn't always clear.
+*/
+
