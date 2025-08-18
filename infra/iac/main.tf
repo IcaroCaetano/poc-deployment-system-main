@@ -10,7 +10,6 @@
 # O nome do cluster é definido usando uma variável var.prefix seguida de poc-kind-cluster.
 
 # Creates a local Kubernetes cluster using Kind (Kubernetes in Docker).
-
 # The cluster name is defined using a var.prefix variable followed by poc-kind-cluster.
 resource "kind_cluster" "default" {
   name = "${var.prefix}poc-kind-cluster"
